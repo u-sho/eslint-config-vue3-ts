@@ -1,2 +1,3 @@
 # eslint-config-u-sho-vue3-ts
-sharable eslint config for vue3 + ts
+
+Vue 3 + TypeScript' s ESLint rules for u-sho.

@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/u-sho/eslint-config-u-sho-vue3-ts.git"
+    "url": "git+https://github.com/u-sho/eslint-config-vue3-ts.git"
   },
   "keywords": [
     "eslint",
@@ -19,7 +19,7 @@
   "author": "u-sho <shouhei.uechi@gmail.com> (https://github.com/u-sho)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/u-sho/eslint-config-u-sho-vue3-ts/issues"
+    "url": "https://github.com/u-sho/eslint-config-vue3-ts/issues"
   },
-  "homepage": "https://github.com/u-sho/eslint-config-u-sho-vue3-ts#readme"
+  "homepage": "https://github.com/u-sho/eslint-config-vue3-ts#readme"
 }

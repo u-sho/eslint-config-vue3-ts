@@ -2,10 +2,9 @@
   "name": "@u-sho/eslint-config-vue3-ts",
   "version": "1.0.0",
   "description": "Vue 3 & TypeScript ESLint rules for u-sho",
-  "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint --fix --ext .js ."
   },
   "repository": {
     "type": "git",
@@ -14,7 +13,8 @@
   "keywords": [
     "eslint",
     "vue3",
-    "typescript"
+    "typescript",
+    "eslintconfig"
   ],
   "author": "u-sho <shouhei.uechi@gmail.com> (https://github.com/u-sho)",
   "license": "MIT",

@@ -128,6 +128,15 @@ module.exports = {
       'module',
       'require'],
     'no-restricted-imports': [ERROR, {
+      patterns: [
+        '../*',
+        './assets/*',
+        './components/*',
+        './constants/*',
+        './pages/*',
+        './store/*',
+        './utils/*'
+      ],
       paths: [
         // Node.js core imports
         'assert',
@@ -163,17 +172,6 @@ module.exports = {
         'util',
         'vm',
         'zlib'
-      ],
-      patterns: [
-        '../*',
-        './assets/*',
-        '@/assets/*',
-        './components/*',
-        '@/components/*',
-        './constants/*',
-        './pages/*',
-        '@/pages/*',
-        './utils/*'
       ]
     }],
     'no-return-assign'           : [ERROR, 'always'],

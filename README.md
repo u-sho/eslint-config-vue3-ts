@@ -40,7 +40,8 @@ For more information about rules, see below documents.
 
 - <https://eslint.org/docs/rules/>
 - <https://eslint.vuejs.org/rules/>
-- <https://github.com/vuejs/eslint-config-typescript#readme>
+- <https://typescript-eslint.io/rules/>
+- <https://future-architect.github.io/eslint-plugin-vue-scoped-css/rules/>
 
 ## License
 

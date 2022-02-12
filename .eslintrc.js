@@ -1,4 +1,4 @@
-// Sample https://github.com/u-sho/myFirstVite/blob/main/.eslintrc.js
+require('@rushstack/eslint-patch/modern-module-resolution')
 
 const OFF = 0
 const WARN = 1
@@ -10,36 +10,34 @@ const IsI18N = false
 const { peerDependencies } = require('./package.json')
 const isProduction = () => process.env.NODE_ENV === 'production'
 
+/** @type {import('eslint/lib/shared/types').ConfigData} */
 module.exports = {
   ignorePatterns: [
+    '.output',
+    '.nuxt',
     'node_modules',
     'dist',
     'dist-ssr',
     'package-lock.json',
-    'yarn.lock.json',
+    'yarn.lock',
     '*.local'
   ],
 
-  root: true,
-  env : {
+  env: {
     browser: true,
     node   : true
   },
-  parser       : 'vue-eslint-parser',
+  parser       : require.resolve('vue-eslint-parser'),
   parserOptions: {
+    parser      : require.resolve('@typescript-eslint/parser'),
     ecmaFeatures: { impliedStrict: true },
-    ecmaVersion : 2021,
-    parser      : '@typescript-eslint/parser',
-    sourceType  : 'module',
-    vueFeatures : {
-      filter                : false,
-      interpolationAsNonHTML: true
-    }
+    ecmaVersion : 2022,
+    vueFeatures : { filter: false }
   },
   extends: [
     'eslint:all',
     'plugin:vue/vue3-recommended',
-    '@vue/typescript'
+    '@vue/eslint-config-typescript/recommended'
   ],
   rules: {
     // Switching rules
@@ -175,8 +173,9 @@ module.exports = {
       ]
     }],
     'no-return-assign'           : [ERROR, 'always'],
-    'no-unsafe-optional-chaining': [ERROR, { disallowArithmeticOperators: true }],
-    'no-unused-expressions'      : [ERROR,
+    'no-unsafe-optional-chaining': [ERROR,
+      { disallowArithmeticOperators: true }],
+    'no-unused-expressions': [ERROR,
       {
         allowShortCircuit: true,
         allowTernary     : true
@@ -240,7 +239,6 @@ module.exports = {
     'no-plusplus'            : OFF,
     'no-ternary'             : OFF,
     'no-underscore-dangle'   : OFF,
-    'no-unused-vars'         : OFF,
     'no-useless-computed-key': OFF,
     'sort-imports'           : OFF,
 
@@ -253,10 +251,17 @@ module.exports = {
       }],
     'vue/comment-directive': [ERROR,
       { reportUnusedDisableDirectives: true }],
+    'vue/component-api-style'              : ERROR,
     'vue/component-name-in-template-casing': [ERROR,
       'PascalCase',
       { registeredComponentsOnly: false }],
-    'vue/custom-event-name-casing'    : ERROR,
+    'vue/component-options-name-casing': ERROR,
+    'vue/custom-event-name-casing'     : ERROR,
+    'vue/first-attribute-linebreak'    : [ERROR,
+      {
+        singleline: 'beside',
+        multiline : 'below'
+      }],
     'vue/html-comment-content-newline': ERROR,
     'vue/html-comment-content-spacing': ERROR,
     'vue/html-comment-indent'         : ERROR,
@@ -278,8 +283,11 @@ module.exports = {
     'vue/next-tick-style'                     : OFF,
     'vue/no-bare-strings-in-template'         : IsI18N ? ERROR : OFF,
     'vue/no-boolean-default'                  : [ERROR, 'default-false'],
+    'vue/no-child-content'                    : ERROR,
     'vue/no-duplicate-attr-inheritance'       : ERROR,
     'vue/no-empty-component-block'            : ERROR,
+    'vue/no-expose-after-await'               : ERROR,
+    'vue/no-loss-of-precision'                : ERROR,
     'vue/no-multiple-objects-in-class'        : ERROR,
     'vue/no-potential-component-option-typo'  : [ERROR,
       {
@@ -329,30 +337,31 @@ module.exports = {
     'vue/no-restricted-v-bind'      : ERROR,
     'vue/no-static-inline-styles'   : ERROR,
     'vue/no-template-target-blank'  : ERROR,
+    'vue/no-undef-components'       : ERROR,
+    'vue/no-undef-properties'       : ERROR,
     'vue/no-unregistered-components': ERROR,
     'vue/no-unsupported-features'   : [ERROR,
-      {
-        version: peerDependencies.vue,
-        ignores: [
-          'v-model-argument',
-          'v-model-custom-modifiers',
-          'v-is'
-        ]
-      }],
+      { version: peerDependencies.vue }],
     'vue/no-unused-properties': [ERROR,
       {
         groups  : ['props', 'data', 'computed', 'methods', 'setup'],
         deepData: true
       }],
-    'vue/no-useless-mustaches'       : ERROR,
-    'vue/no-useless-v-bind'          : ERROR,
-    'vue/padding-line-between-blocks': ERROR,
-    'vue/require-direct-export'      : OFF,
-    'vue/require-name-property'      : ERROR,
-    'vue/script-indent'              : ERROR,
-    'vue/static-class-names-order'   : OFF,
-    'vue/v-for-delimiter-style'      : ERROR,
-    'vue/v-on-event-hyphenation'     : [ERROR,
+    'vue/no-useless-mustaches'         : ERROR,
+    'vue/no-useless-v-bind'            : ERROR,
+    'vue/no-v-text-v-html-on-component': ERROR,
+    'vue/object-shorthand'             : [ERROR,
+      'always',
+      { avoidExplicitReturnArrows: true }],
+    'vue/padding-line-between-blocks' : ERROR,
+    'vue/prefer-separate-static-class': ERROR,
+    'vue/quote-props'                 : [ERROR, 'consistent'],
+    'vue/require-direct-export'       : OFF,
+    'vue/require-name-property'       : ERROR,
+    'vue/script-indent'               : ERROR,
+    'vue/static-class-names-order'    : OFF,
+    'vue/v-for-delimiter-style'       : ERROR,
+    'vue/v-on-event-hyphenation'      : [ERROR,
       'always',
       { autofix: true }],
     'vue/v-on-function-call': [ERROR,
@@ -366,11 +375,8 @@ module.exports = {
       rules: {
         'array-bracket-newline': [ERROR, 'consistent'],
         'max-lines'            : OFF,
-        'no-restricted-globals': [ERROR,
-          'document',
-          'window',
-          'navigator'],
-        'sort-keys': [ERROR, 'asc', { minKeys: 10 }]
+        'no-restricted-globals': [ERROR, 'document', 'window', 'navigator'],
+        'sort-keys'            : [ERROR, 'asc', { minKeys: 10 }]
       }
     },
     {

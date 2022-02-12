@@ -36,6 +36,7 @@ module.exports = {
   },
   extends: [
     'eslint:all',
+    'plugin:vue-scoped-css/all',
     'plugin:vue/vue3-recommended',
     '@vue/eslint-config-typescript/recommended'
   ],

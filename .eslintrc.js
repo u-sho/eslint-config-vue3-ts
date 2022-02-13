@@ -107,7 +107,6 @@ module.exports = {
         skipComments  : true
       }],
     'max-nested-callbacks'   : [ERROR, { max: 2 }],
-    'max-statements-per-line': [ERROR, { max: 2 }],
     'multiline-ternary'      : [WARN, 'always-multiline'],
     'new-cap'                : [ERROR, { capIsNew: false }],
     'no-else-return'         : [ERROR, { allowElseIf: false }],

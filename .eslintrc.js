@@ -55,7 +55,7 @@ module.exports = {
           : ['warn', 'error', 'debug', 'table', 'log']
       }],
     'no-debugger'        : isProduction() ? ERROR : WARN,
-    'no-warning-comments': isProduction() ? ERROR : OFF,
+    'no-warning-comments': isProduction() ? ERROR : WARN,
 
     // Custom rules
     // eslint-disable-next-line sort-keys

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unused-modules
 require('@rushstack/eslint-patch/modern-module-resolution')
 
 const OFF = 0
@@ -8,6 +9,7 @@ const INDENT_SPACES = 2
 const IsI18N = false
 
 const { peerDependencies } = require('./package.json')
+
 const isProduction = () => process.env.NODE_ENV === 'production'
 
 /** @type {import('eslint/lib/shared/types').ConfigData} */
@@ -34,8 +36,12 @@ module.exports = {
     ecmaVersion : 2022,
     vueFeatures : { filter: false }
   },
-  extends: [
+  settings: { 'import/resolver': { typescript: {}}},
+  extends : [
     'eslint:all',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
     'plugin:vue-scoped-css/all',
     'plugin:vue/vue3-recommended',
     '@vue/eslint-config-typescript/recommended'
@@ -128,7 +134,6 @@ module.exports = {
       'require'],
     'no-restricted-imports': [ERROR, {
       patterns: [
-        '../*',
         './assets/*',
         './components/*',
         './constants/*',
@@ -242,6 +247,26 @@ module.exports = {
     'no-underscore-dangle'   : OFF,
     'no-useless-computed-key': OFF,
     'sort-imports'           : OFF,
+
+    // Import rules
+    // eslint-disable-next-line sort-keys
+    'import/exports-last'              : WARN,
+    'import/first'                     : WARN,
+    'import/newline-after-import'      : WARN,
+    'import/no-cycle'                  : ERROR,
+    'import/no-deprecated'             : WARN,
+    'import/no-dynamic-require'        : ERROR,
+    'import/no-extraneous-dependencies': ERROR,
+    'import/no-mutable-exports'        : ERROR,
+    'import/no-relative-parent-imports': ERROR,
+    'import/no-self-import'            : ERROR,
+    'import/no-unused-modules'         : [WARN,
+      {
+        missingExports: true,
+        unusedExports : true
+      }],
+    'import/no-useless-path-segments': ERROR,
+    'import/order'                   : ERROR,
 
     // Vue Uncategorized rules
     'vue/block-tag-newline': [WARN,

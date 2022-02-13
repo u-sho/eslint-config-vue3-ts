@@ -65,7 +65,7 @@ module.exports = {
     'comma-dangle'                  : [WARN, 'never'],
     'complexity'                    : [ERROR, { max: 2 }],
     'consistent-this'               : [ERROR, 'self'],
-    'curly'                         : [WARN, 'multi-or-nest', 'consistent'],
+    'curly'                         : [WARN, 'multi', 'consistent'],
     'dot-location'                  : [ERROR, 'property'],
     'eol-last'                      : [WARN, 'always'],
     'func-names'                    : [ERROR, 'as-needed'],

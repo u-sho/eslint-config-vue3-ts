@@ -7,8 +7,7 @@ const ERROR = 2
 
 const INDENT_SPACES = 2
 const IsI18N = false
-
-const { peerDependencies } = require('./package.json')
+const VUE_VERSION_STRING = require('./package.json').peerDependencies.vue
 
 const isProduction = () => process.env.NODE_ENV === 'production'
 
@@ -237,7 +236,6 @@ module.exports = {
 
     // Off rules
     // eslint-disable-next-line sort-keys
-    'default-case'           : OFF,
     'guard-for-in'           : OFF,
     'id-length'              : OFF,
     'no-continue'            : OFF,
@@ -248,7 +246,7 @@ module.exports = {
     'no-useless-computed-key': OFF,
     'sort-imports'           : OFF,
 
-    // Import rules
+    // Import not-recommended rules
     // eslint-disable-next-line sort-keys
     'import/exports-last'              : WARN,
     'import/first'                     : WARN,
@@ -366,9 +364,8 @@ module.exports = {
     'vue/no-template-target-blank': ERROR,
     'vue/no-undef-components'     : ERROR,
     'vue/no-undef-properties'     : ERROR,
-    'vue/no-unsupported-features' : [ERROR,
-      { version: peerDependencies.vue }],
-    'vue/no-unused-properties': [ERROR,
+    'vue/no-unsupported-features' : [ERROR, { version: VUE_VERSION_STRING }],
+    'vue/no-unused-properties'    : [ERROR,
       {
         groups  : ['props', 'data', 'computed', 'methods', 'setup'],
         deepData: true

@@ -1,4 +1,5 @@
-// Sample https://github.com/u-sho/myFirstVite/blob/main/.eslintrc.js
+// eslint-disable-next-line import/no-unused-modules
+require('@rushstack/eslint-patch/modern-module-resolution')
 
 const OFF = 0
 const WARN = 1
@@ -6,40 +7,43 @@ const ERROR = 2
 
 const INDENT_SPACES = 2
 const IsI18N = false
+const VUE_VERSION_STRING = require('./package.json').peerDependencies.vue
 
-const { peerDependencies } = require('./package.json')
 const isProduction = () => process.env.NODE_ENV === 'production'
 
+/** @type {import('eslint/lib/shared/types').ConfigData} */
 module.exports = {
   ignorePatterns: [
+    '.output',
+    '.nuxt',
     'node_modules',
     'dist',
     'dist-ssr',
     'package-lock.json',
-    'yarn.lock.json',
+    'yarn.lock',
     '*.local'
   ],
 
-  root: true,
-  env : {
+  env: {
     browser: true,
     node   : true
   },
-  parser       : 'vue-eslint-parser',
+  parser       : require.resolve('vue-eslint-parser'),
   parserOptions: {
+    parser      : require.resolve('@typescript-eslint/parser'),
     ecmaFeatures: { impliedStrict: true },
-    ecmaVersion : 2021,
-    parser      : '@typescript-eslint/parser',
-    sourceType  : 'module',
-    vueFeatures : {
-      filter                : false,
-      interpolationAsNonHTML: true
-    }
+    ecmaVersion : 2022,
+    vueFeatures : { filter: false }
   },
-  extends: [
+  settings: { 'import/resolver': { typescript: {}}},
+  extends : [
     'eslint:all',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
+    'plugin:vue-scoped-css/all',
     'plugin:vue/vue3-recommended',
-    '@vue/typescript'
+    '@vue/eslint-config-typescript/recommended'
   ],
   rules: {
     // Switching rules
@@ -50,31 +54,31 @@ module.exports = {
           : ['warn', 'error', 'debug', 'table', 'log']
       }],
     'no-debugger'        : isProduction() ? ERROR : WARN,
-    'no-warning-comments': isProduction() ? ERROR : OFF,
+    'no-warning-comments': isProduction() ? ERROR : WARN,
 
     // Custom rules
     // eslint-disable-next-line sort-keys
     'accessor-pairs'       : [ERROR, { enforceForClassMembers: false }],
-    'array-bracket-newline': [ERROR, { multiline: true }],
+    'array-bracket-newline': [WARN, { multiline: true }],
     'array-callback-return': [ERROR, { checkForEach: true }],
-    'array-element-newline': [ERROR, 'consistent'],
-    'arrow-parens'         : [ERROR, 'as-needed'],
-    'brace-style'          : [ERROR,
+    'array-element-newline': [WARN, 'consistent'],
+    'arrow-parens'         : [WARN, 'as-needed'],
+    'brace-style'          : [WARN,
       '1tbs',
       { allowSingleLine: true }],
-    'capitalized-comments'          : [ERROR, 'always'],
-    'comma-dangle'                  : [ERROR, 'never'],
+    'capitalized-comments'          : [WARN, 'always'],
+    'comma-dangle'                  : [WARN, 'never'],
     'complexity'                    : [ERROR, { max: 2 }],
     'consistent-this'               : [ERROR, 'self'],
-    'curly'                         : [ERROR, 'multi-or-nest', 'consistent'],
+    'curly'                         : [WARN, 'multi', 'consistent'],
     'dot-location'                  : [ERROR, 'property'],
-    'eol-last'                      : [ERROR, 'always'],
+    'eol-last'                      : [WARN, 'always'],
     'func-names'                    : [ERROR, 'as-needed'],
     'function-call-argument-newline': [ERROR, 'consistent'],
     'grouped-accessor-pairs'        : [ERROR, 'getBeforeSet'],
-    'indent'                        : [ERROR, INDENT_SPACES],
-    'key-spacing'                   : [ERROR, { align: 'colon' }],
-    'keyword-spacing'               : [ERROR,
+    'indent'                        : [WARN, INDENT_SPACES],
+    'key-spacing'                   : [WARN, { align: 'colon' }],
+    'keyword-spacing'               : [WARN,
       {
         overrides: {
           'for'  : { after: false },
@@ -82,7 +86,7 @@ module.exports = {
           'while': { after: false }
         }
       }],
-    'lines-around-comment': [ERROR,
+    'lines-around-comment': [WARN,
       {
         allowArrayEnd     : true,
         allowArrayStart   : true,
@@ -93,13 +97,13 @@ module.exports = {
         beforeBlockComment: true,
         beforeLineComment : true
       }],
-    'max-len': [ERROR,
+    'max-len': [WARN,
       {
-        tabWidth              : 2,
         ignoreUrls            : true,
         ignoreStrings         : true,
         ignoreTemplateLiterals: true,
-        ignoreRegExpLiterals  : true
+        ignoreRegExpLiterals  : true,
+        tabWidth              : INDENT_SPACES
       }],
     'max-lines-per-function': [ERROR,
       {
@@ -107,14 +111,14 @@ module.exports = {
         skipBlankLines: true,
         skipComments  : true
       }],
-    'max-nested-callbacks'   : [ERROR, { max: 2 }],
-    'max-statements-per-line': [ERROR, { max: 2 }],
-    'multiline-ternary'      : [ERROR, 'always-multiline'],
-    'new-cap'                : [ERROR, { capIsNew: false }],
-    'no-else-return'         : [ERROR, { allowElseIf: false }],
-    'no-implicit-coercion'   : [ERROR, { boolean: false }],
-    'no-magic-numbers'       : [ERROR, { ignore: [0, 1, 2] }],
-    'no-multiple-empty-lines': [ERROR,
+    'max-nested-callbacks': [ERROR, { max: 2 }],
+    'multiline-ternary'   : [WARN, 'always-multiline'],
+    'new-cap'             : [ERROR, { capIsNew: false }],
+    'no-else-return'      : [ERROR, { allowElseIf: false }],
+    'no-implicit-coercion': [ERROR, { boolean: false }],
+    'no-magic-numbers'    : [ERROR,
+      { ignore: [0, 1, 2, 24, 60, 1000, 1024, 3600] }],
+    'no-multiple-empty-lines': [WARN,
       {
         max   : 1,
         maxBOF: 0,
@@ -129,7 +133,6 @@ module.exports = {
       'require'],
     'no-restricted-imports': [ERROR, {
       patterns: [
-        '../*',
         './assets/*',
         './components/*',
         './constants/*',
@@ -175,49 +178,50 @@ module.exports = {
       ]
     }],
     'no-return-assign'           : [ERROR, 'always'],
-    'no-unsafe-optional-chaining': [ERROR, { disallowArithmeticOperators: true }],
-    'no-unused-expressions'      : [ERROR,
+    'no-unsafe-optional-chaining': [ERROR,
+      { disallowArithmeticOperators: true }],
+    'no-unused-expressions': [ERROR,
       {
         allowShortCircuit: true,
         allowTernary     : true
       }],
-    'object-curly-newline': [ERROR, { multiline: true }],
-    'object-curly-spacing': [ERROR,
+    'object-curly-newline': [WARN, { multiline: true }],
+    'object-curly-spacing': [WARN,
       'always',
       { objectsInObjects: false }],
-    'object-property-newline': [ERROR, { allowAllPropertiesOnSameLine: true }],
+    'object-property-newline': [WARN, { allowAllPropertiesOnSameLine: true }],
     'object-shorthand'       : [ERROR,
       'always',
       { avoidExplicitReturnArrows: true }],
     'one-var'                        : [ERROR, 'never'],
-    'operator-linebreak'             : [ERROR, 'before'],
-    'padded-blocks'                  : [ERROR, 'never'],
-    'padding-line-between-statements': [ERROR,
+    'operator-linebreak'             : [WARN, 'before'],
+    'padded-blocks'                  : [WARN, 'never'],
+    'padding-line-between-statements': [WARN,
       { blankLine: 'always', next: '*', prev: 'import' },
       { blankLine: 'any', next: 'import', prev: 'import' },
       { blankLine: 'never', next: '*', prev: 'singleline-let' },
       { blankLine: 'always', next: 'return', prev: '*' }],
-    'quote-props': [ERROR, 'consistent'],
-    'quotes'     : [ERROR, 'single'],
-    'semi'       : [ERROR, 'never'],
-    'sort-keys'  : [ERROR,
+    'quote-props': [WARN, 'consistent'],
+    'quotes'     : [WARN, 'single'],
+    'semi'       : [WARN, 'never'],
+    'sort-keys'  : [WARN,
       'asc',
       {
         caseSensitive: true,
         natural      : true
       }],
-    'space-before-function-paren': [ERROR,
+    'space-before-function-paren': [WARN,
       {
         anonymous : 'never',
         asyncArrow: 'always',
         named     : 'never'
       }],
-    'space-unary-ops': [ERROR,
+    'space-unary-ops': [WARN,
       {
         nonwords: false,
         words   : true
       }],
-    'spaced-comment': [ERROR,
+    'spaced-comment': [WARN,
       'always',
       {
         block: {
@@ -232,7 +236,6 @@ module.exports = {
 
     // Off rules
     // eslint-disable-next-line sort-keys
-    'default-case'           : OFF,
     'guard-for-in'           : OFF,
     'id-length'              : OFF,
     'no-continue'            : OFF,
@@ -240,46 +243,76 @@ module.exports = {
     'no-plusplus'            : OFF,
     'no-ternary'             : OFF,
     'no-underscore-dangle'   : OFF,
-    'no-unused-vars'         : OFF,
     'no-useless-computed-key': OFF,
     'sort-imports'           : OFF,
 
+    // Import not-recommended rules
+    // eslint-disable-next-line sort-keys
+    'import/exports-last'              : WARN,
+    'import/first'                     : WARN,
+    'import/newline-after-import'      : WARN,
+    'import/no-cycle'                  : ERROR,
+    'import/no-deprecated'             : WARN,
+    'import/no-dynamic-require'        : ERROR,
+    'import/no-extraneous-dependencies': ERROR,
+    'import/no-mutable-exports'        : ERROR,
+    'import/no-relative-parent-imports': ERROR,
+    'import/no-self-import'            : ERROR,
+    'import/no-unused-modules'         : [WARN,
+      {
+        missingExports: true,
+        unusedExports : true
+      }],
+    'import/no-useless-path-segments': ERROR,
+    'import/order'                   : ERROR,
+
     // Vue Uncategorized rules
-    'vue/block-tag-newline': [ERROR,
+    'vue/block-tag-newline': [WARN,
       {
         singleline   : 'always',
         multiline    : 'always',
         maxEmptyLines: 1
       }],
-    'vue/comment-directive': [ERROR,
+    'vue/comment-directive': [WARN,
       { reportUnusedDisableDirectives: true }],
-    'vue/component-name-in-template-casing': [ERROR,
+    'vue/component-api-style'              : ERROR,
+    'vue/component-name-in-template-casing': [WARN,
       'PascalCase',
       { registeredComponentsOnly: false }],
-    'vue/custom-event-name-casing'    : ERROR,
-    'vue/html-comment-content-newline': ERROR,
-    'vue/html-comment-content-spacing': ERROR,
-    'vue/html-comment-indent'         : ERROR,
+    'vue/component-options-name-casing': WARN,
+    'vue/custom-event-name-casing'     : WARN,
+    'vue/first-attribute-linebreak'    : [WARN,
+      {
+        singleline: 'beside',
+        multiline : 'below'
+      }],
+    'vue/html-comment-content-newline': WARN,
+    'vue/html-comment-content-spacing': WARN,
+    'vue/html-comment-indent'         : [WARN, INDENT_SPACES],
     'vue/match-component-file-name'   : [ERROR,
       {
         extensions     : ['vue'],
         shouldMatchCase: true
       }],
-    'vue/max-len': [ERROR,
+    'vue/max-len': [WARN,
       {
         ignoreUrls               : true,
         ignoreStrings            : true,
         ignoreTemplateLiterals   : true,
         ignoreRegExpLiterals     : true,
         ignoreHTMLAttributeValues: true,
-        ignoreHTMLTextContents   : true
+        ignoreHTMLTextContents   : true,
+        tabWidth                 : INDENT_SPACES
       }],
-    'vue/new-line-between-multi-line-property': ERROR,
+    'vue/new-line-between-multi-line-property': WARN,
     'vue/next-tick-style'                     : OFF,
     'vue/no-bare-strings-in-template'         : IsI18N ? ERROR : OFF,
     'vue/no-boolean-default'                  : [ERROR, 'default-false'],
+    'vue/no-child-content'                    : ERROR,
     'vue/no-duplicate-attr-inheritance'       : ERROR,
     'vue/no-empty-component-block'            : ERROR,
+    'vue/no-expose-after-await'               : ERROR,
+    'vue/no-loss-of-precision'                : ERROR,
     'vue/no-multiple-objects-in-class'        : ERROR,
     'vue/no-potential-component-option-typo'  : [ERROR,
       {
@@ -326,33 +359,32 @@ module.exports = {
         key    : 'manifest',
         message: 'This attribute is obsolete. Use <link rel="manifest"> instead.'
       }],
-    'vue/no-restricted-v-bind'      : ERROR,
-    'vue/no-static-inline-styles'   : ERROR,
-    'vue/no-template-target-blank'  : ERROR,
-    'vue/no-unregistered-components': ERROR,
-    'vue/no-unsupported-features'   : [ERROR,
-      {
-        version: peerDependencies.vue,
-        ignores: [
-          'v-model-argument',
-          'v-model-custom-modifiers',
-          'v-is'
-        ]
-      }],
-    'vue/no-unused-properties': [ERROR,
+    'vue/no-restricted-v-bind'    : ERROR,
+    'vue/no-static-inline-styles' : ERROR,
+    'vue/no-template-target-blank': ERROR,
+    'vue/no-undef-components'     : ERROR,
+    'vue/no-undef-properties'     : ERROR,
+    'vue/no-unsupported-features' : [ERROR, { version: VUE_VERSION_STRING }],
+    'vue/no-unused-properties'    : [ERROR,
       {
         groups  : ['props', 'data', 'computed', 'methods', 'setup'],
         deepData: true
       }],
-    'vue/no-useless-mustaches'       : ERROR,
-    'vue/no-useless-v-bind'          : ERROR,
-    'vue/padding-line-between-blocks': ERROR,
-    'vue/require-direct-export'      : OFF,
-    'vue/require-name-property'      : ERROR,
-    'vue/script-indent'              : ERROR,
-    'vue/static-class-names-order'   : OFF,
-    'vue/v-for-delimiter-style'      : ERROR,
-    'vue/v-on-event-hyphenation'     : [ERROR,
+    'vue/no-useless-mustaches'         : ERROR,
+    'vue/no-useless-v-bind'            : ERROR,
+    'vue/no-v-text-v-html-on-component': ERROR,
+    'vue/object-shorthand'             : [ERROR,
+      'always',
+      { avoidExplicitReturnArrows: true }],
+    'vue/padding-line-between-blocks' : WARN,
+    'vue/prefer-separate-static-class': ERROR,
+    'vue/quote-props'                 : [WARN, 'consistent'],
+    'vue/require-direct-export'       : OFF,
+    'vue/require-name-property'       : ERROR,
+    'vue/script-indent'               : [WARN, INDENT_SPACES],
+    'vue/static-class-names-order'    : OFF,
+    'vue/v-for-delimiter-style'       : ERROR,
+    'vue/v-on-event-hyphenation'      : [ERROR,
       'always',
       { autofix: true }],
     'vue/v-on-function-call': [ERROR,
@@ -364,13 +396,10 @@ module.exports = {
     {
       files: ['.eslintrc.*'],
       rules: {
-        'array-bracket-newline': [ERROR, 'consistent'],
+        'array-bracket-newline': [WARN, 'consistent'],
         'max-lines'            : OFF,
-        'no-restricted-globals': [ERROR,
-          'document',
-          'window',
-          'navigator'],
-        'sort-keys': [ERROR, 'asc', { minKeys: 10 }]
+        'no-restricted-globals': [ERROR, 'document', 'window', 'navigator'],
+        'sort-keys'            : [WARN, 'asc', { minKeys: 10 }]
       }
     },
     {
@@ -379,7 +408,7 @@ module.exports = {
         'indent'       : OFF,
         'max-len'      : OFF,
         'sort-keys'    : OFF,
-        'vue/sort-keys': ERROR
+        'vue/sort-keys': WARN
       }
     }
   ]

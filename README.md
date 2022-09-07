@@ -23,24 +23,24 @@ Once the `@u-sho/eslint-config-vue3-ts` package is installed, you can use it in 
 ### Additional rules
 
 Your can customize rules for your project.
-For example, using alias `@c/` as `src/components`, write like below.
+For example, to allow multi attributes per single line.
 
 ```json
 {
   "extends": "@u-sho/vue3-ts",
   "rules": {
-    "no-restricted-imports": ["error",
-      { "pattern": ["@/components/*"] }
-    ]
+    "vue/max-attributes-per-line": ["warn", { "singleLine": 5 }]
   }
 }
 ```
 
 For more information about rules, see below documents.
 
-- <https://eslint.org/docs/rules/>
-- <https://eslint.vuejs.org/rules/>
-- <https://github.com/vuejs/eslint-config-typescript#readme>
+- [ESLint built-in rules](https://eslint.org/docs/rules/)
+- [eslint-plugin-vue rules](https://eslint.vuejs.org/rules/)
+- [eslint-plugin-import rules](https://github.com/import-js/eslint-plugin-import#rules)
+- [eslint-plugin-vue-scoped-css rules](https://future-architect.github.io/eslint-plugin-vue-scoped-css/rules/)
+- [@typescript-eslint/eslint-plugin rules](https://typescript-eslint.io/rules/)
 
 ## License
 
